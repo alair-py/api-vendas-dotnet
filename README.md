@@ -1,5 +1,5 @@
 # API PAYMENT POTTENCIAL
-VIDEO:
+VIDEO DEMONSTRATIVO: https://youtu.be/w-YvMS2e5iA
 
 Teste final do bootcamp Digital Innovation One e Pottencial, trata-se de uma API de Vendas, em que se pode cadastrar Vendedor através de um CRUD e também Vendas, ambos em tabelas diferentes e relacionadas através de Foreign Key. Abaixo uma documentação básica de utilização dos serviços.
 

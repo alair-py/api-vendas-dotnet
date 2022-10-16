@@ -23,12 +23,12 @@ namespace tech_test_payment_api.Controllers
             // BUSCA TODAS VENDAS BASEADOS NO ID DO VENDEDOR (POR FOREIGN KEY)
             List<Venda> venda = _context.Vendas.Where(x => x.VendedorId.Equals(id)).ToList();
 
-            // ADICIONA VENDAS ENCONTRADAS PELA FK, NO CAMPO DE VENDAS DO VENDEDOR
-            vendedor.Vendas = venda;
-
             if(vendedor == null) {
                 return NotFound();
             }
+            
+            // ADICIONA VENDAS ENCONTRADAS PELA FK, NO CAMPO DE VENDAS DO VENDEDOR
+            vendedor.Vendas = venda;
 
             return Ok(vendedor);
         }

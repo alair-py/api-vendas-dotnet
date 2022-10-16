@@ -14,9 +14,7 @@ namespace tech_test_payment_api.Controllers
             _context = context;
         }
 
-        /// <summary>
-        /// TESTE VENDA ETC.
-        /// </summary>
+
         // RETORNA UMA VENDA BASEADO NO ID
         [HttpGet("{id}")]
         public IActionResult GetById(int id) {
