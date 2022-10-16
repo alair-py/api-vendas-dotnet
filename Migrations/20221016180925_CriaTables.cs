@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace tech_test_payment_api.Migrations
 {
-    public partial class CriacaoTabelaVendaVendedor : Migration
+    public partial class CriaTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

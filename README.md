@@ -1,36 +1,172 @@
-## INSTRUÇÕES PARA O TESTE TÉCNICO
+# API PAYMENT POTTENCIAL
+VIDEO:
 
-- Crie um fork deste projeto (https://gitlab.com/Pottencial/tech-test-payment-api/-/forks/new). É preciso estar logado na sua conta Gitlab;
-- Adicione @Pottencial (Pottencial Seguradora) como membro do seu fork. Você pode fazer isto em  https://gitlab.com/`your-user`/tech-test-payment-api/settings/members;
- - Quando você começar, faça um commit vazio com a mensagem "Iniciando o teste de tecnologia" e quando terminar, faça o commit com uma mensagem "Finalizado o teste de tecnologia";
- - Commit após cada ciclo de refatoração pelo menos;
- - Não use branches;
- - Você deve prover evidências suficientes de que sua solução está completa indicando, no mínimo, que ela funciona;
+Teste final do bootcamp Digital Innovation One e Pottencial, trata-se de uma API de Vendas, em que se pode cadastrar Vendedor através de um CRUD e também Vendas, ambos em tabelas diferentes e relacionadas através de Foreign Key. Abaixo uma documentação básica de utilização dos serviços.
 
+  
 
-## O TESTE
-- Construir uma API REST utilizando .Net Core, Java ou NodeJs (com Typescript);
-- A API deve expor uma rota com documentação swagger (http://.../api-docs).
-- A API deve possuir 3 operações:
-  1) Registrar venda: Recebe os dados do vendedor + itens vendidos. Registra venda com status "Aguardando pagamento";
-  2) Buscar venda: Busca pelo Id da venda;
-  3) Atualizar venda: Permite que seja atualizado o status da venda.
-     * OBS.: Possíveis status: `Pagamento aprovado` | `Enviado para transportadora` | `Entregue` | `Cancelada`.
-- Uma venda contém informação sobre o vendedor que a efetivou, data, identificador do pedido e os itens que foram vendidos;
-- O vendedor deve possuir id, cpf, nome, e-mail e telefone;
-- A inclusão de uma venda deve possuir pelo menos 1 item;
-- A atualização de status deve permitir somente as seguintes transições: 
-  - De: `Aguardando pagamento` Para: `Pagamento Aprovado`
-  - De: `Aguardando pagamento` Para: `Cancelada`
-  - De: `Pagamento Aprovado` Para: `Enviado para Transportadora`
-  - De: `Pagamento Aprovado` Para: `Cancelada`
-  - De: `Enviado para Transportador`. Para: `Entregue`
-- A API não precisa ter mecanismos de autenticação/autorização;
-- A aplicação não precisa implementar os mecanismos de persistência em um banco de dados, eles podem ser persistidos "em memória".
+## EndPoint VENDA
 
-## PONTOS QUE SERÃO AVALIADOS
-- Arquitetura da aplicação - embora não existam muitos requisitos de negócio, iremos avaliar como o projeto foi estruturada, bem como camadas e suas responsabilidades;
-- Programação orientada a objetos;
-- Boas práticas e princípios como SOLID, DDD (opcional), DRY, KISS;
-- Testes unitários;
-- Uso correto do padrão REST;
+* ### GET /Venda/{id}
+
+Descrição: Retorna uma venda armazenada no banco de dados.
+
+#### Parâmetros
+
+	Necessário parâmetro ID.
+
+#### Respostas
+
+	200 - Sucesso! 
+Exemplo:
+
+```
+{
+	"id": 3,
+	"vendedorId": 17,
+	"item": "RTX 3060",
+	"data": "2022-02-20T13:22:21",
+	"status": 0
+}
+```
+
+	400 - ID inválido. Motivos: "ID diferente de padrão esperado."
+
+	404 - Não encontrado. Motivos: "ID não corresponde a uma venda válida."
+
+  
+
+* ### POST /Venda/{idVendedor}
+
+Descrição:  Adiciona nova venda ao banco de dados.
+
+#### Parâmetros
+
+	Necessário parâmetro ID de um vendedor válido.
+
+Exemplo Request Body:
+
+```
+{
+	"item": "Monitor 2k",
+	"data": "2022-10-16T16:34:50.770Z",
+	"status": 0
+}
+```
+
+#### Respostas
+
+	200 - Sucesso!
+
+	400 - Requisição inválida. Motivos: "ID inválido ou valor nulo em campo obrigatório."
+
+  
+
+* ### PATCH /Venda/{idVenda},{statusVenda}
+
+Descrição: Altera status da venda. 
+#### Atenção! 
+Novas vendas são registradas automaticamente com status 'Aguardando Pagamento'. 
+Os status possuem as seguintes regras de alteração:
+ >'Aguardando Pagamento' para 'Pagamento Aprovado'.
+ 'Aguardando Pagamento' para 'Cancelado'
+ 'Pagamento Aprovado' para 'Cancelado'
+ 'Pagamento Aprovado' para 'Enviado a Transportadora'
+ 'Enviado a Transportadora' para 'Entregue'
+
+#### Parâmetros
+
+	Necessário parâmetros "idVenda", "statusVenda".
+
+#### IDs para alteração: 
+>1 = Pagamento Aprovado 
+2 = Enviado p/ Transportadora
+3 = Entregue
+4 = Cancelado
+
+  
+
+#### Respostas
+
+	200 - Sucesso!
+
+	400 - Requisição inválida. Motivos: "Possível alteração de status fora das regras estabelecidas."
+
+	404 - Não encontrado. Motivos: "ID de venda não encontrado."
+
+  
+
+## EndPoint VENDEDOR
+
+* ### GET /Vendedor/{id}
+
+Busca um vendedor pelo ID.
+
+#### Parâmetros
+
+	Necessário parâmetro ID.
+
+#### Respostas
+
+	200 - Sucesso!
+
+	404 - Não encontrado. Motivos: "Não encontrou um vendedor com ID informado."
+
+  
+  
+
+* ### PATCH /Vendedor/{id}
+
+Descrição: Altera dados de um vendedor pelo ID.
+
+#### Parâmetros
+
+	Necessário parâmetro ID.
+
+#### Respostas
+
+	200 - Sucesso!
+
+	404 - Não encontrado. Motivos: "ID não encontrou um vendedor com ID informado."
+
+  
+  
+
+* ### DELETE /Vendedor/{id}
+
+Descrição: Exclui um vendedor pelo ID.
+
+#### Parâmetros
+
+	Necessário parâmetro ID.
+
+#### Respostas
+
+	200 - Sucesso!
+
+	404 - Não encontrado. Motivos: "Não encontrou um vendedor com ID informado."
+
+  
+  
+
+* ### POST /Vendedor
+
+Descrição: Cria um novo vendedor. 
+Exemplo Request Body:
+
+```
+{
+	"nome": "string",
+	"cpf": "string",
+	"email": "string",
+	"telefone": "string"
+}
+```
+
+#### Paramêtros
+
+Não necessita parâmetros.
+
+#### Respostas
+
+	200 - Sucesso.
